@@ -2,8 +2,17 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import os
+from sqlalchemy import text
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+import os
+import dotenv   
+
 
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = dotenv.get_key('.env', 'SQLALCHEMY_DATABASE_URI')
+db = SQLAlchemy(app)
 
 # Select environment based on the ENV environment variable
 if os.getenv('ENV') == 'local':
@@ -16,11 +25,15 @@ elif os.getenv('ENV') == 'ghci':
     print("Running in github mode")
     app.config.from_object('config.GithubCIConfig')
 
-db = SQLAlchemy(app)
 
 from iebank_api.models import Account
 
 with app.app_context():
+
+    # query = text("ALTER TABLE account ADD COLUMN country VARCHAR(32)")
+    # db.session.execute(query)
+    # db.session.commit()
+
     db.create_all()
 CORS(app)
 
