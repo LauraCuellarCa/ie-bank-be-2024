@@ -49,11 +49,11 @@ def test_update_account(testing_client):
 
     # Now, update the account
     update_response = testing_client.put(f'/accounts/{account_id}', json={
-        'name': 'Robert'
+        'name': 'Anna'
     })
     assert update_response.status_code == 200
     updated_data = update_response.get_json()
-    assert updated_data['name'] == 'Robert'
+    assert updated_data['name'] == 'Anna'
     assert updated_data['currency'] == '£'
     assert updated_data['country'] == 'UK'
     assert updated_data['id'] == account_id
